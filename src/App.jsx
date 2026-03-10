@@ -58,6 +58,7 @@ export default function PortfolioApp() {
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden"
+            type="button"
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -114,7 +115,7 @@ export default function PortfolioApp() {
                     <video 
                       controls
                       className="w-full h-full object-cover"
-                      poster={`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23374151' width='400' height='300'/%3E%3C/svg%3E`}
+                      poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23374151' width='400' height='300'/%3E%3C/svg%3E"
                     >
                       <source src={project.videoUrl} type="video/mp4" />
                       Your browser does not support the video tag.
@@ -137,13 +138,13 @@ export default function PortfolioApp() {
                     {project.description}
                   </p>
                   
-                  <a 
-                    href="#" 
+                  <button 
+                    type="button"
                     className="inline-flex items-center gap-2 text-sm font-light text-slate-900 hover:text-slate-600 transition group"
                   >
                     View Case Study
                     <ExternalLink size={16} className="group-hover:translate-x-1 transition" />
-                  </a>
+                  </button>
                 </div>
               </div>
             ))}
@@ -167,10 +168,10 @@ export default function PortfolioApp() {
             <div className="space-y-4">
               <h3 className="text-sm font-light tracking-widest text-slate-500 uppercase">Skills</h3>
               <div className="space-y-2 text-slate-600 font-light text-sm leading-relaxed">
-                <p>• Motion Graphics & Animation</p>
-                <p>• Brand Identity Design</p>
-                <p>• Digital Design & UI/UX</p>
-                <p>• Adobe Creative Suite</p>
+                <p>Motion Graphics &amp; Animation</p>
+                <p>Brand Identity Design</p>
+                <p>Digital Design &amp; UI/UX</p>
+                <p>Adobe Creative Suite</p>
               </div>
             </div>
             
@@ -188,9 +189,9 @@ export default function PortfolioApp() {
       <section id="contact" className="py-32 bg-slate-50">
         <div className="max-w-4xl mx-auto px-6 text-center space-y-12">
           <div className="space-y-4">
-            <h2 className="text-5xl font-light text-slate-900">Let's Work Together</h2>
+            <h2 className="text-5xl font-light text-slate-900">Let&apos;s Work Together</h2>
             <p className="text-xl text-slate-600 font-light">
-              I'm always interested in hearing about new projects and opportunities.
+              I&apos;m always interested in hearing about new projects and opportunities.
             </p>
           </div>
           
@@ -203,14 +204,18 @@ export default function PortfolioApp() {
               Send Email
             </a>
             <a 
-              href="#" 
+              href="https://linkedin.com/in/yourprofile"
+              rel="noreferrer"
+              target="_blank"
               className="inline-flex items-center gap-2 text-sm font-light text-slate-600 hover:text-slate-900 transition"
             >
               <Linkedin size={18} />
               LinkedIn
             </a>
             <a 
-              href="#" 
+              href="https://github.com/yourprofile"
+              rel="noreferrer"
+              target="_blank"
               className="inline-flex items-center gap-2 text-sm font-light text-slate-600 hover:text-slate-900 transition"
             >
               <Github size={18} />
