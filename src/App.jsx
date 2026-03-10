@@ -1,15 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Menu, X, ExternalLink, Mail, Linkedin, Github } from 'lucide-react';
 
 export default function PortfolioApp() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const projects = [
     {
@@ -17,7 +10,7 @@ export default function PortfolioApp() {
       title: "Project One",
       category: "Motion Graphics",
       description: "A seamless blend of design and animation. This project showcases dynamic visual storytelling through carefully crafted motion sequences.",
-      videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", // Replace with your video
+      videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
       year: "2024"
     },
     {
@@ -25,7 +18,7 @@ export default function PortfolioApp() {
       title: "Project Two",
       category: "Brand Identity",
       description: "Complete branding system from concept to execution. Includes typography, color palette, and animated brand guidelines.",
-      videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", // Replace with your video
+      videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
       year: "2024"
     },
     {
@@ -33,7 +26,7 @@ export default function PortfolioApp() {
       title: "Project Three",
       category: "Digital Design",
       description: "Interactive design experience combining user experience with sophisticated motion design principles.",
-      videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", // Replace with your video
+      videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
       year: "2023"
     },
     {
@@ -41,7 +34,7 @@ export default function PortfolioApp() {
       title: "Project Four",
       category: "Motion Graphics",
       description: "Experimental motion study exploring the boundaries between graphic design and animation.",
-      videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", // Replace with your video
+      videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
       year: "2023"
     }
   ];
