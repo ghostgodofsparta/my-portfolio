@@ -3,8 +3,7 @@ import { Menu, X, ExternalLink, Mail, Linkedin, Github } from 'lucide-react';
 
 export default function PortfolioApp() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
-  const [scrollY, setScrollY] = useState(0);
+  
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
