@@ -3,16 +3,51 @@ import './App.css';
 
 // ── GALLERY DATA ──────────────────────────────────────────────
 // HOW TO ADD YOUR WORK:
-// image: '/work/your-file.jpg'   ← for photos
-// video: '/work/your-file.mp4'   ← for motion work (add a thumbnail image too)
-// Leave as null until you're ready to upload
+// Each project has a `media` array — up to 5 items per project
+// For a photo:  { type: 'image', src: '/work/filename.png' }
+// For a video:  { type: 'video', src: '/work/filename.mp4', thumb: '/work/thumb.png' }
+// The FIRST item in the array is used as the card thumbnail
 const PROJECTS = [
-  { id: 1, category: 'branding', visual: 'visual-branding',   shape: 'FLUX', label: 'Branding & Identity', name: 'FLUX STUDIO',   desc: 'Complete brand identity for a contemporary architecture firm — logomark, type system, and brand language.', image: null, video: null },
-  { id: 2, category: 'motion',   visual: 'visual-motion',     shape: '▶',    label: 'Motion Design',       name: 'KINETIC TYPE',  desc: 'Title sequence and motion graphics for an independent film festival.', image: null, video: null },
-  { id: 3, category: 'ui',       visual: 'visual-ui',         shape: 'UI',   label: 'UI/UX Design',        name: 'WAVE APP',      desc: 'End-to-end product design for a fintech mobile app — research, wireframes, and high-fidelity UI.', image: null, video: null },
-  { id: 4, category: 'branding', visual: 'visual-branding-2', shape: 'ORB',  label: 'Branding & Identity', name: 'ORB COSMETICS', desc: 'Bold, gender-neutral cosmetics brand built around color and confidence.', image: null, video: null },
-  { id: 5, category: 'motion',   visual: 'visual-motion-2',   shape: '◆',   label: 'Motion Design',       name: 'NEON REEL',     desc: 'Animated brand reveal and social content series for a music label launch.', image: null, video: null },
-  { id: 6, category: 'ui',       visual: 'visual-ui-2',       shape: 'UX',   label: 'UI/UX Design',        name: 'GROVE DASH',    desc: 'Redesign of a grocery delivery platform — 40% faster checkout, +28% user retention.', image: null, video: null },
+  {
+    id: 1, category: 'branding', visual: 'visual-branding', shape: 'FLUX',
+    label: 'Branding & Identity', name: 'PROJECT ONE',
+    desc: 'Add your project description here.',
+    media: [
+      // { type: 'image', src: '/work/project1-a.png' },
+      // { type: 'image', src: '/work/project1-b.png' },
+      // { type: 'video', src: '/work/project1.mp4', thumb: '/work/project1-thumb.png' },
+    ],
+  },
+  {
+    id: 2, category: 'motion', visual: 'visual-motion', shape: '▶',
+    label: 'Motion Design', name: 'PROJECT TWO',
+    desc: 'Add your project description here.',
+    media: [],
+  },
+  {
+    id: 3, category: 'ui', visual: 'visual-ui', shape: 'UI',
+    label: 'UI/UX Design', name: 'PROJECT THREE',
+    desc: 'Add your project description here.',
+    media: [],
+  },
+  {
+    id: 4, category: 'branding', visual: 'visual-branding-2', shape: 'ORB',
+    label: 'Branding & Identity', name: 'PROJECT FOUR',
+    desc: 'Add your project description here.',
+    media: [],
+  },
+  {
+    id: 5, category: 'motion', visual: 'visual-motion-2', shape: '◆',
+    label: 'Motion Design', name: 'PROJECT FIVE',
+    desc: 'Add your project description here.',
+    media: [],
+  },
+  {
+    id: 6, category: 'ui', visual: 'visual-ui-2', shape: 'UX',
+    label: 'UI/UX Design', name: 'PROJECT SIX',
+    desc: 'Add your project description here.',
+    media: [],
+  },
 ];
 
 const SKILLS = [
@@ -215,58 +250,88 @@ function scrollTo(id) { document.getElementById(id)?.scrollIntoView({ behavior: 
 
 // ── LIGHTBOX ──────────────────────────────────────────────────
 function Lightbox({ project, onClose }) {
+  const [activeIndex, setActiveIndex] = useState(0);
   const videoRef = useRef(null);
+  const media = project.media || [];
+  const hasMedia = media.length > 0;
+  const current = media[activeIndex];
 
   useEffect(() => {
-    // Prevent body scroll while open
     document.body.style.overflow = 'hidden';
-    // Play video if present
-    if (videoRef.current) videoRef.current.play();
-    // Close on Escape key
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', onKey);
-    return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', onKey);
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') setActiveIndex(i => Math.min(i + 1, media.length - 1));
+      if (e.key === 'ArrowLeft')  setActiveIndex(i => Math.max(i - 1, 0));
     };
-  }, [onClose]);
+    window.addEventListener('keydown', onKey);
+    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', onKey); };
+  }, [onClose, media.length]);
+
+  // Auto-play/pause video on slide change
+  useEffect(() => {
+    if (videoRef.current) { videoRef.current.load(); videoRef.current.play(); }
+  }, [activeIndex]);
+
+  const goTo = (i) => setActiveIndex(i);
 
   return (
     <div className="lightbox-overlay" onClick={onClose}>
       <div className="lightbox-box" onClick={e => e.stopPropagation()}>
 
-        {/* Close button */}
         <button className="lightbox-close" onClick={onClose} aria-label="Close">✕</button>
 
-        {/* Media area */}
+        {/* Main media viewer */}
         <div className="lightbox-media">
-          {project.video ? (
-            <video
-              ref={videoRef}
-              src={project.video}
-              className="lightbox-video"
-              controls
-              autoPlay
-              loop
-              playsInline
-            />
-          ) : project.image ? (
-            <img src={project.image} alt={project.name} className="lightbox-img" />
-          ) : (
+          {!hasMedia ? (
             <div className={`lightbox-placeholder ${project.visual}`}>
               <span className="placeholder-label">{project.shape}</span>
               <span className="placeholder-tag">Work coming soon</span>
             </div>
+          ) : current.type === 'video' ? (
+            <video ref={videoRef} src={current.src} className="lightbox-video" controls autoPlay loop playsInline />
+          ) : (
+            <img src={current.src} alt={`${project.name} ${activeIndex + 1}`} className="lightbox-img" />
+          )}
+
+          {/* Prev / Next arrows */}
+          {media.length > 1 && (
+            <>
+              <button className="lb-arrow lb-arrow-left"  onClick={() => goTo(Math.max(activeIndex - 1, 0))} disabled={activeIndex === 0}>‹</button>
+              <button className="lb-arrow lb-arrow-right" onClick={() => goTo(Math.min(activeIndex + 1, media.length - 1))} disabled={activeIndex === media.length - 1}>›</button>
+            </>
           )}
         </div>
 
-        {/* Info panel */}
+        {/* Right panel */}
         <div className="lightbox-info">
           <span className="lightbox-category">{project.label}</span>
           <h3 className="lightbox-title">{project.name}</h3>
           <p className="lightbox-desc">{project.desc}</p>
+
+          {/* Thumbnail strip */}
+          {media.length > 1 && (
+            <div className="lb-thumbs">
+              {media.map((m, i) => (
+                <button
+                  key={i}
+                  className={`lb-thumb${i === activeIndex ? ' active' : ''}`}
+                  onClick={() => goTo(i)}
+                >
+                  {m.type === 'video' ? (
+                    m.thumb
+                      ? <img src={m.thumb} alt={`thumb ${i}`} />
+                      : <span className="lb-thumb-play">▶</span>
+                  ) : (
+                    <img src={m.src} alt={`thumb ${i}`} />
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="lightbox-divider" />
-          <span className="lightbox-hint">Press ESC or click outside to close</span>
+          {media.length > 0 && <span className="lb-counter">{activeIndex + 1} / {media.length}</span>}
+          <span className="lightbox-hint">ESC to close · ← → to navigate</span>
         </div>
 
       </div>
@@ -277,13 +342,15 @@ function Lightbox({ project, onClose }) {
 // ── PROJECT CARD ──────────────────────────────────────────────
 function ProjectCard({ project, filtered, onOpen }) {
   const videoRef = useRef(null);
+  const media = project.media || [];
+  const firstMedia = media[0];
+  const thumb = firstMedia
+    ? firstMedia.type === 'video' ? firstMedia.thumb : firstMedia.src
+    : null;
+  const hasVideo = firstMedia?.type === 'video';
 
-  const handleMouseEnter = () => {
-    if (videoRef.current) { videoRef.current.currentTime = 0; videoRef.current.play(); }
-  };
-  const handleMouseLeave = () => {
-    if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; }
-  };
+  const handleMouseEnter = () => { if (videoRef.current) { videoRef.current.currentTime = 0; videoRef.current.play(); } };
+  const handleMouseLeave = () => { if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; } };
 
   return (
     <div
@@ -294,15 +361,10 @@ function ProjectCard({ project, filtered, onOpen }) {
       onClick={() => onOpen(project)}
     >
       <div className="project-card-inner">
-        {/* Media */}
-        {project.video ? (
+        {thumb ? (
           <div className="project-color-bg">
-            {project.image && <img src={project.image} alt={project.name} className="project-real-img project-thumb" />}
-            <video ref={videoRef} src={project.video} className="project-video" muted loop playsInline />
-          </div>
-        ) : project.image ? (
-          <div className="project-color-bg">
-            <img src={project.image} alt={project.name} className="project-real-img" />
+            <img src={thumb} alt={project.name} className="project-real-img project-thumb" />
+            {hasVideo && <video ref={videoRef} src={firstMedia.src} className="project-video" muted loop playsInline />}
           </div>
         ) : (
           <div className={`project-color-bg ${project.visual}`}>
@@ -314,13 +376,12 @@ function ProjectCard({ project, filtered, onOpen }) {
           </div>
         )}
 
-        {/* Overlay */}
         <div className="project-overlay">
           <span className="project-category">{project.label}</span>
           <h3 className="project-name">{project.name}</h3>
           <p className="project-desc">{project.desc}</p>
           <span className="project-link">
-            {project.video ? '▶ Play Reel' : 'View Project'} →
+            {media.length > 1 ? `View ${media.length} Items →` : media.length === 1 ? 'View Project →' : 'Coming Soon'}
           </span>
         </div>
       </div>
