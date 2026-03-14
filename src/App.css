@@ -299,6 +299,9 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; j
 .project-card:nth-child(4) { grid-column: span 4; }
 .project-card:nth-child(5) { grid-column: span 4; }
 .project-card:nth-child(6) { grid-column: span 4; }
+/* Single card — don't let it stretch full width */
+.projects-grid:has(.project-card:only-child) .project-card { grid-column: span 5; grid-row: span 1; max-width: 520px; }
+.projects-grid:has(.project-card:only-child) { justify-content: center; }
 .project-card.hidden { opacity: 0.1; transform: scale(0.97); pointer-events: none; }
 .project-card-inner { aspect-ratio: 4/3; position: relative; overflow: hidden; }
 .project-card:nth-child(1) .project-card-inner { aspect-ratio: 3/4; }
