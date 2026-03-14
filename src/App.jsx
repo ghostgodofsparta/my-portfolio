@@ -359,7 +359,7 @@ function ProjectCard({ project, filtered, onOpen }) {
       data-category={project.category}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onClick={() => onOpen(project)}
+      onClick={() => { if (project.media && project.media.length > 0) onOpen(project); }}
     >
       <div className="project-card-inner">
         {thumb ? (
@@ -470,8 +470,8 @@ export default function App() {
           desc: p.description || '',
           media: (p.media || []).map(m => ({
             type: m.mediaType,
-            src: m.mediaType === 'video' ? m.video?.asset?.url : m.image?.asset?.url,
-            thumb: m.thumbnail?.asset?.url || null,
+            src: m.mediaType === 'video' ? m.videoUrl : m.imageUrl,
+            thumb: m.thumbUrl || null,
           })).filter(m => m.src),
         }));
         setProjects(mapped);
@@ -592,8 +592,8 @@ export default function App() {
       <section id="about">
         <div className="about-left reveal">
           <div className="about-photo-wrap">
-            {aboutData?.photo?.asset?.url ? (
-              <img src={aboutData.photo.asset.url} alt="Luke Oturi" className="about-photo-img" />
+            {aboutData?.photoUrl ? (
+              <img src={aboutData.photoUrl} alt="Luke Oturi" className="about-photo-img" />
             ) : (
               <div className="about-photo-placeholder"><span className="photo-hint">Your Photo</span></div>
             )}

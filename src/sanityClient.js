@@ -21,23 +21,22 @@ export const getProjects = async () => {
       order,
       media[] {
         mediaType,
-        image { asset-> { url } },
-        video  { asset-> { url } },
-        thumbnail { asset-> { url } },
+        "imageUrl": image.asset->url,
+        "videoUrl": video.asset->url,
+        "thumbUrl": thumbnail.asset->url,
       }
     }
   `);
 };
 
 export const getAbout = async () => {
-  const results = await client.fetch(`
+  return client.fetch(`
     *[_type == "about"][0] {
-      photo { asset-> { url } },
+      "photoUrl": photo.asset->url,
       intro,
       bio,
       philosophy,
       skills[] { name, percent }
     }
   `);
-  return results;
 };
