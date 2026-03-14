@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
+import { getProjects, getAbout } from './sanityClient';
 
 // ── GALLERY DATA ──────────────────────────────────────────────
 // HOW TO ADD YOUR WORK:
@@ -448,9 +449,39 @@ function useTypewriter() {
 export default function App() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [lightboxProject, setLightboxProject] = useState(null);
+  const [projects, setProjects] = useState(PROJECTS);
+  const [loading, setLoading] = useState(true);
+  const [aboutData, setAboutData] = useState(null);
   const { line1, line2, showPortfolio, showRest } = useTypewriter();
   useReveal();
   useSkillBars();
+
+  // Fetch projects from Sanity
+  useEffect(() => {
+    getProjects().then(data => {
+      if (data && data.length > 0) {
+        const mapped = data.map((p, i) => ({
+          id: p._id,
+          category: p.category || 'branding',
+          visual: PROJECTS[i % PROJECTS.length]?.visual || 'visual-branding',
+          shape: PROJECTS[i % PROJECTS.length]?.shape || '✦',
+          label: p.category === 'motion' ? 'Motion Design' : p.category === 'ui' ? 'UI/UX Design' : 'Branding & Identity',
+          name: p.name,
+          desc: p.description || '',
+          media: (p.media || []).map(m => ({
+            type: m.mediaType,
+            src: m.mediaType === 'video' ? m.video?.asset?.url : m.image?.asset?.url,
+            thumb: m.thumbnail?.asset?.url || null,
+          })).filter(m => m.src),
+        }));
+        setProjects(mapped);
+      }
+      setLoading(false);
+    }).catch(() => setLoading(false));
+
+    // Fetch about data
+    getAbout().then(data => { if (data) setAboutData(data); }).catch(() => {});
+  }, []);
 
   useEffect(() => {
     const el = document.querySelector('.hero-bg-text');
@@ -561,9 +592,11 @@ export default function App() {
       <section id="about">
         <div className="about-left reveal">
           <div className="about-photo-wrap">
-            <div className="about-photo-placeholder">
-              <span className="photo-hint">Your Photo</span>
-            </div>
+            {aboutData?.photo?.asset?.url ? (
+              <img src={aboutData.photo.asset.url} alt="Luke Oturi" className="about-photo-img" />
+            ) : (
+              <div className="about-photo-placeholder"><span className="photo-hint">Your Photo</span></div>
+            )}
             <div className="about-photo-glow" />
           </div>
         </div>
@@ -576,12 +609,15 @@ export default function App() {
             <span className="word-3">Create.</span>
           </div>
           <p className="about-intro">A <strong>passionate visual storyteller</strong> with a drive for work that communicates, captivates, and converts.</p>
-          <p className="about-body">Proficient across industry-standard design tools on both Mac and Windows — with 4 years of hands-on experience turning ideas into visuals that mean something.<br /><br />From brand identities that define companies to motion pieces that move people — I craft visual systems with intention. My process blends strategic thinking with instinctive design, finding the tension between concept and execution that makes work truly memorable.<br /><br /><span className="about-philosophy">Deadlines are a promise. Quality is non-negotiable. Every pixel delivered with purpose.</span></p>
+          <p className="about-body">
+            {aboutData?.bio || 'Proficient across industry-standard design tools on both Mac and Windows — with 4 years of hands-on experience turning ideas into visuals that mean something.\n\nFrom brand identities that define companies to motion pieces that move people — I craft visual systems with intention. My process blends strategic thinking with instinctive design, finding the tension between concept and execution that makes work truly memorable.'}
+            <span className="about-philosophy">{aboutData?.philosophy || 'Deadlines are a promise. Quality is non-negotiable. Every pixel delivered with purpose.'}</span>
+          </p>
           <div className="skills-grid">
-            {SKILLS.map(s => (
+            {(aboutData?.skills || SKILLS.map(s => ({ name: s.name, percent: s.pct * 100 }))).map(s => (
               <div className="skill-item" key={s.name}>
                 <div className="skill-name">{s.name}</div>
-                <div className="skill-bar-bg"><div className="skill-bar-fill" style={{ width: `${s.pct * 100}%` }} /></div>
+                <div className="skill-bar-bg"><div className="skill-bar-fill" style={{ width: `${s.percent}%` }} /></div>
               </div>
             ))}
           </div>
@@ -605,16 +641,22 @@ export default function App() {
         </div>
 
         <div className="projects-grid">
-          {PROJECTS.map(p => (
-            <ProjectCard
-              key={p.id}
-              project={p}
-              filtered={activeFilter !== 'all' && p.category !== activeFilter}
-              onOpen={setLightboxProject}
-            />
-          ))}
+          {loading ? (
+            <div className="gallery-loading">
+              <span className="gallery-loading-dot" /><span className="gallery-loading-dot" /><span className="gallery-loading-dot" />
+            </div>
+          ) : (
+            projects.map(p => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                filtered={activeFilter !== 'all' && p.category !== activeFilter}
+                onOpen={setLightboxProject}
+              />
+            ))
+          )}
         </div>
-        <p className="gallery-hint">✦ Drop files into <code>/public/work/</code> — set <code>image</code> for photos, <code>video</code> for MP4s in <code>App.jsx</code></p>
+        <p className="gallery-hint">✦ Add your work via the <a href="http://localhost:3333" target="_blank" rel="noreferrer">Sanity Studio</a> — no code needed</p>
       </section>
 
       {/* LIGHTBOX */}
