@@ -475,6 +475,10 @@ export default function App() {
           })).filter(m => m.src),
         }));
         setProjects(mapped);
+        // Re-trigger reveal observer after data loads
+        setTimeout(() => {
+          document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+        }, 100);
       }
       setLoading(false);
     }).catch(() => setLoading(false));
