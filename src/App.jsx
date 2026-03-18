@@ -640,9 +640,9 @@ export default function App() {
             <h2 className="section-title">THE<br /><span className="outline">GALLERY.</span></h2>
           </div>
           <div className="filter-tabs">
-            {['all','branding','motion','ui','web'].map(f => (
+            {['all','branding','ui','web','social'].map(f => (
               <button key={f} className={`filter-btn${activeFilter === f ? ' active' : ''}`} onClick={() => setActiveFilter(f)}>
-                {f === 'all' ? 'All' : f === 'ui' ? 'UI/UX' : f === 'web' ? 'Web Dev' : f.charAt(0).toUpperCase() + f.slice(1)}
+                {f === 'all' ? 'All' : f === 'ui' ? 'UI/UX' : f === 'web' ? 'Web Dev' : f === 'social' ? 'Social Media' : f.charAt(0).toUpperCase() + f.slice(1)}
               </button>
             ))}
           </div>
