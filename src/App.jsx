@@ -614,10 +614,12 @@ export default function App() {
             <span className="word-2">TO</span>
             <span className="word-3">Create.</span>
           </div>
-          <p className="about-intro">A <strong>passionate visual storyteller</strong> with a drive for work that communicates, captivates, and converts.</p>
+          <p className="about-intro">A <strong>multi-disciplinary creative and digital strategist</strong> engineering experiences that are as functional as they are unforgettable.</p>
           <p className="about-body">
-            {aboutData?.bio || 'Proficient across industry-standard design tools on both Mac and Windows — with 4 years of hands-on experience turning ideas into visuals that mean something.\n\nFrom brand identities that define companies to motion pieces that move people — I craft visual systems with intention. My process blends strategic thinking with instinctive design, finding the tension between concept and execution that makes work truly memorable.'}
-            <span className="about-philosophy">{aboutData?.philosophy || 'Deadlines are a promise. Quality is non-negotiable. Every pixel delivered with purpose.'}</span>
+            Proficient across industry-standard design and development tools on both Mac and Windows — with 4 years of hands-on experience at the intersection of design, technology, and communication.<br /><br />
+            From brand identities that define companies, to motion pieces that move people, to full-stack web solutions that perform — I don't just make things look good. I make them <em>work</em>. My process fuses strategic thinking with instinctive design and technical precision, closing the gap between concept and execution at every level.<br /><br />
+            Whether it's a brand system built to scale, a UI crafted for conversion, a motion piece engineered for impact, or a social media strategy designed to grow — every deliverable is built with the same obsessive attention to detail.
+            <span className="about-philosophy">Deadlines are a promise. Quality is non-negotiable. Every pixel, every line of code, every post — delivered with purpose.</span>
           </p>
           <div className="skills-grid">
             {(aboutData?.skills || SKILLS.map(s => ({ name: s.name, percent: s.pct * 100 }))).map(s => (
