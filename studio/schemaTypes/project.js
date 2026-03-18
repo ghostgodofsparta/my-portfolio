@@ -15,9 +15,11 @@ export default {
       type: 'string',
       options: {
         list: [
-          { title: 'Branding & Identity', value: 'branding' },
-          { title: 'Motion Design',       value: 'motion'   },
-          { title: 'UI/UX Design',        value: 'ui'       },
+          { title: 'Branding & Identity',    value: 'branding' },
+          { title: 'Motion Design',          value: 'motion'   },
+          { title: 'UI/UX Design',           value: 'ui'       },
+          { title: 'Web Development',        value: 'web'      },
+          { title: 'Social Media Marketing', value: 'social'   },
         ],
         layout: 'radio',
       },

@@ -52,12 +52,14 @@ const PROJECTS = [
 ];
 
 const SKILLS = [
-  { name: 'Brand Identity',    pct: 0.95 },
-  { name: 'Motion Design',     pct: 0.88 },
-  { name: 'UI/UX Design',      pct: 0.90 },
-  { name: 'Art Direction',     pct: 0.85 },
-  { name: 'Typography',        pct: 0.92 },
-  { name: 'Print & Editorial', pct: 0.80 },
+  { name: 'Brand Identity',          pct: 0.95 },
+  { name: 'Motion Design',           pct: 0.88 },
+  { name: 'UI/UX Design',            pct: 0.90 },
+  { name: 'Web Development',         pct: 0.82 },
+  { name: 'Social Media Marketing',  pct: 0.85 },
+  { name: 'Art Direction',           pct: 0.85 },
+  { name: 'Typography',              pct: 0.92 },
+  { name: 'Print & Editorial',       pct: 0.80 },
 ];
 
 // ── AMBIENT ORBS ──────────────────────────────────────────────
@@ -465,7 +467,7 @@ export default function App() {
           category: p.category || 'branding',
           visual: PROJECTS[i % PROJECTS.length]?.visual || 'visual-branding',
           shape: PROJECTS[i % PROJECTS.length]?.shape || '✦',
-          label: p.category === 'motion' ? 'Motion Design' : p.category === 'ui' ? 'UI/UX Design' : 'Branding & Identity',
+          label: p.category === 'motion' ? 'Motion Design' : p.category === 'ui' ? 'UI/UX Design' : p.category === 'web' ? 'Web Development' : p.category === 'social' ? 'Social Media Marketing' : 'Branding & Identity',
           name: p.name,
           desc: p.description || '',
           media: (p.media || []).map(m => ({
@@ -585,8 +587,8 @@ export default function App() {
       {/* MARQUEE */}
       <div className="marquee-section" aria-hidden="true">
         <div className="marquee-track">
-          {['BRANDING','MOTION DESIGN','UI/UX','VISUAL IDENTITY','ART DIRECTION','TYPOGRAPHY','CREATIVE DIRECTION',
-            'BRANDING','MOTION DESIGN','UI/UX','VISUAL IDENTITY','ART DIRECTION','TYPOGRAPHY','CREATIVE DIRECTION'].map((t, i) => (
+          {['BRANDING','MOTION DESIGN','UI/UX','WEB DEVELOPMENT','VISUAL IDENTITY','ART DIRECTION','SOCIAL MEDIA MARKETING','TYPOGRAPHY','CREATIVE DIRECTION',
+            'BRANDING','MOTION DESIGN','UI/UX','WEB DEVELOPMENT','VISUAL IDENTITY','ART DIRECTION','SOCIAL MEDIA MARKETING','TYPOGRAPHY','CREATIVE DIRECTION'].map((t, i) => (
             <span className="marquee-item" key={i}><span className="marquee-dot" />{t}</span>
           ))}
         </div>
@@ -636,9 +638,9 @@ export default function App() {
             <h2 className="section-title">THE<br /><span className="outline">GALLERY.</span></h2>
           </div>
           <div className="filter-tabs">
-            {['all','branding','motion','ui'].map(f => (
+            {['all','branding','motion','ui','web'].map(f => (
               <button key={f} className={`filter-btn${activeFilter === f ? ' active' : ''}`} onClick={() => setActiveFilter(f)}>
-                {f === 'all' ? 'All' : f === 'ui' ? 'UI/UX' : f.charAt(0).toUpperCase() + f.slice(1)}
+                {f === 'all' ? 'All' : f === 'ui' ? 'UI/UX' : f === 'web' ? 'Web Dev' : f.charAt(0).toUpperCase() + f.slice(1)}
               </button>
             ))}
           </div>
